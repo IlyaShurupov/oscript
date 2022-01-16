@@ -30,12 +30,6 @@ struct call_stack {
 		return mem[bp + idx];
 	}
 
-	void ret(Object*) {
-	}
-
-	Object* get(alni idx) {
-		return NULL;
-	}
 };
 
 
@@ -54,6 +48,7 @@ struct process {
 	process(code* entry, _opearator** optable);
 
 	void run_instruction();
+
 };
 
 

@@ -18,6 +18,12 @@
     <ClCompile Include="..\src\methodobject.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\classobject.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\script_section.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\vm.h">
@@ -27,6 +33,15 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\include\methodobject.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\classobject.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\script_section.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\oscript.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

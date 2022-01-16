@@ -1,82 +1,64 @@
 #pragma once
 
-/*
-
 #include "methodobject.h"
 
-struct MemScriptSection {
-	List<script_data*> scripts;
-
-	script_data* get_script() {
-		//script_data* out = new scri
-		return NULL;
-	}
-
-	void release_script(script_data*) {
-	}
-};
-
-MemScriptSection ScriptSection;
+#include "script_section.h"
 
 void MethodObject::constructor(MethodObject* self) {
-	self->script = NULL;
+	self->script = ScriptSection.new_script();
 }
 
 void MethodObject::copy(MethodObject* self, const MethodObject* in) {
+	ScriptSection.change_script(self->script, in->script);
 	self->script = in->script;
-	self->self = in->self;
 }
 
 void MethodObject::destructor(MethodObject* self) {
-	ScriptSection.release_script(self->script);
+	ScriptSection.abandon_script(self->script);
 }
 
 static alni save_size(MethodObject* self) {
-	alni len = self->items.Len();
-	return (len + 1) * sizeof(alni);
+	// script_table_file_address 
+	// script string object address
+	return sizeof(alni) * 2; 
 }
 
 static void save(MethodObject* self, File& file_self) {
 
-	alni len = self->items.Len();
-	file_self.write<alni>(&len);
+	// script_table_file_address 
+	alni script_table_file_address = ScriptSection.get_script_file_adress(self->script);
+	file_self.write<alni>(&script_table_file_address);
 
-	for (auto item : self->items) {
-		alni ndo_object_adress = NDO->save(file_self, item.Data());
-		file_self.write<alni>(&ndo_object_adress);
-	}
+	// script string object address
+	alni script_string_object = NDO->save(file_self, self->script->script);
+	file_self.write<alni>(&script_string_object);
 }
 
 static void load(File& file_self, MethodObject* self) {
 
-	new (&self->items) List<Object*>();
+	// script_table_file_address 
+	alni script_table_file_address;
+	file_self.read<alni>(&script_table_file_address);
+	self->script = ScriptSection.get_scritp_from_file_adress(script_table_file_address);
 
-	alni len;
-	file_self.read<alni>(&len);
-
-	for (alni i = 0; i < len; i++) {
-		alni ndo_object_adress;
-		file_self.read<alni>(&ndo_object_adress);
-		self->items.PushBack(NDO->load(file_self, ndo_object_adress));
-	}
+	// script string object address
+	alni script_string_object;
+	file_self.read<alni>(&script_string_object);
+	self->script->script = (StringObject*)NDO->load(file_self, script_string_object);
 }
 
 
-void method_object_call_method_object(Object* self, object_caller* caller) {
-	//NDO_CAST(IntObject, caller->get(0))->val = NDO_CAST(ListObject, self)->items.Len();
+void method_object_compile_script(MethodObject* self, object_caller* caller) {
+	self->script->bytecode.Reserve(1);
+	self->script->bytecode[0] = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 }
 
-void method_object_compile_script(Object* self, object_caller* caller) {
-	//NDO_CAST(ListObject, self)->items.PushBack(caller->get(0));
-}
-
-type_method* MethodObjectTypeMethods[] = {
-	method_object_call_method_object,
-	method_object_compile_script,
+type_method MethodObjectTypeMethods[] = {
+	"compile", (type_method_adress*)method_object_compile_script,
 };
 
 
-struct ObjectType ListObjectType = {
+struct ObjectType MethodObjectType = {
 	.base = NULL,
 	.constructor = (object_constructor)MethodObject::constructor,
 	.destructor = (object_destructor)MethodObject::destructor,
@@ -89,5 +71,3 @@ struct ObjectType ListObjectType = {
 	.load = (object_load)load,
 	.methods = MethodObjectTypeMethods,
 };
-
-*/
