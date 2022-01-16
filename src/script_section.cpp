@@ -1,4 +1,3 @@
-#pragma once
 
 #include "script_section.h"
 
@@ -27,8 +26,8 @@ script_data* MemScriptSection::new_script() {
 
 	sdhead->refc = 1;
 	sdhead->store_adress = -1;
-
-	out->script = (StringObject*)NDO->create("str");
+	
+	out->script = NULL;
 	new (&out->bytecode) Array<instruction>();
 
 	scripts.PushBack(out);
@@ -89,7 +88,6 @@ void MemScriptSection::load_script_table_from_file(MemScriptSection* self, File&
 		script_data* new_script = self->new_script();
 		self->scripts.PushBack(new_script);
 		self->abandon_script(new_script);
-		new_script->script = NULL;
 
 		//read string object
 		set_script_head_store_adress(new_script, file.adress);
@@ -115,10 +113,17 @@ script_data* MemScriptSection::get_scritp_from_file_adress(alni file_adress) {
 	return NULL;
 }
 
+MemScriptSection::~MemScriptSection() {
+	// scripts are not freed
+	//for (auto iter : scripts) {
+		//free(((script_data_head*)(iter.Data()) - 1));
+	//}
+}
+
 save_load_callbacks slcb_script_section {
 	.self = &ScriptSection,
 	.pre_save = (pre_save_callback*)MemScriptSection::save_script_table_to_file,
 	.pre_load = (pre_load_callback*)MemScriptSection::load_script_table_from_file,
 	.post_save = NULL,
 	.post_load = NULL,
-}
+};

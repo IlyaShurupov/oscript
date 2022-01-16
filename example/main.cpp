@@ -18,7 +18,7 @@ int main() {
 
 
 	code func;
-	func.Reserve(15);
+	func.Reserve(16);
 	func[0]  = { OP_CREATE,  0, 0, 0, 0, 0, 0, 0, (alni)(&int_type)                                            }; // my_int = 0;
 	func[1]  = { OP_CREATE,  1, 0, 0, 0, 0, 0, 0, (alni)(&list_type)                                           }; // my_list = [];
 	func[2]  = { OP_CREATE,  2, 0, 0, 0, 0, 0, 0, (alni)(&string_type)                                         }; // save_path = "A:/data/tmp/nd.nd";
@@ -32,8 +32,9 @@ int main() {
 	func[10] = { OP_LOAD,    4, 2, 0, 0, 0, 0, 0, 0                                                            }; // loaded_list = load(save_path);
 	func[11] = { OP_DESTROY, 0, 0, 0, 0, 0, 0, 0, 0                                                            }; //~my_int;
 	func[12] = { OP_DESTROY, 1, 0, 0, 0, 0, 0, 0, 0                                                            }; // ~my_list;
-	func[13] = { OP_DESTROY, 4, 0, 0, 0, 0, 0, 0, 0                                                            }; // ~method; 
-	func[14] = { OP_DESTROY, 3, 0, 0, 0, 0, 0, 0, 0                                                            }; // ~loaded_list; // childs are unfreed
+	func[13] = { OP_DESTROY, 2, 0, 0, 0, 0, 0, 0, 0                                                            }; // ~my_list;
+	func[14] = { OP_DESTROY, 3, 0, 0, 0, 0, 0, 0, 0                                                            }; // ~method; 
+	func[15] = { OP_DESTROY, 4, 0, 0, 0, 0, 0, 0, 0                                                            }; // ~loaded_list; // childs are unfreed
 
 	vm.run_code(&func, object_optable);
 }

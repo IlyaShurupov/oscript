@@ -6,6 +6,7 @@
 
 void MethodObject::constructor(MethodObject* self) {
 	self->script = ScriptSection.new_script();
+	self->script->script = (StringObject*)NDO->create("str");
 }
 
 void MethodObject::copy(MethodObject* self, const MethodObject* in) {

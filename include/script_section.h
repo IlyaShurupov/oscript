@@ -8,6 +8,10 @@
 struct MemScriptSection {
 	List<script_data*> scripts;
 
+	MemScriptSection() {
+		scripts.recursive_free_on_destruction = false;
+	}
+
 	script_data* new_script();
 	void reference_script(script_data* script);
 	void change_script(script_data* current_script, script_data* new_script);
@@ -17,7 +21,9 @@ struct MemScriptSection {
 	static void save_script_table_to_file(MemScriptSection* self, File& file);
 	alni get_script_file_adress(script_data* in);
 	static void load_script_table_from_file(MemScriptSection* self, File& file);
-	script_data* get_scritp_from_file_adress(alni file_adress);
+	script_data* get_scritp_from_file_adress(alni file_adress); \
+
+	~MemScriptSection();
 };
 
 extern MemScriptSection ScriptSection;

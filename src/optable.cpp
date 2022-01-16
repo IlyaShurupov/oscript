@@ -96,7 +96,7 @@ void load(process* proc, instruction* inst) {
 
 	StringObject* path = (StringObject*)proc->cstack[string_path_obj_adress];
 
-	proc->cstack[ret_adress] = (alni)NDO->load(path);
+	proc->cstack[ret_adress] = (alni)NDO->load(path->val);
 }
 
 _opearator* object_optable[] = {

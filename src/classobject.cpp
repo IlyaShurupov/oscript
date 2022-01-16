@@ -20,7 +20,7 @@ type_method ClassObjectTypeMethods[] = {
 };
 
 
-struct ObjectType ListObjectType = {
+struct ObjectType ClassObjectType = {
 	.base = &DictObjectType,
 	.constructor = (object_constructor)ClassObject::constructor,
 	.destructor = (object_destructor)ClassObject::destructor,
