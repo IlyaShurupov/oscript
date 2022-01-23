@@ -24,6 +24,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\types\include\IO\File.cpp" />
     <ClCompile Include="..\src\entry.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

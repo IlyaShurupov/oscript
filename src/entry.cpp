@@ -25,5 +25,7 @@ int main(int argc, char* argv[]) {
 
 	vm.run_code(&bytecode, object_optable);
 
+
+	oscript_finilize();
 	return 0;
 }

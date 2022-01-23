@@ -1,0 +1,17 @@
+calculator {
+	
+	%left '+' '-';
+	%left '*' '/';
+	
+	%none integer;
+	%whitespace "[ \t\r\n]*";
+
+	expr: 
+		expr '+' expr [add] |
+		expr '-' expr [subtract] |
+		expr '*' expr [multiply] |
+		expr '/' expr [divide] |
+		'(' expr ')' [compound] |
+	integer [integer] ; 
+	integer: "[0-9]+"; 
+}
