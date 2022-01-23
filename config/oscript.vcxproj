@@ -19,19 +19,25 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\lalr\config\lalr.vcxproj">
+      <Project>{71dc0c80-a394-46c8-88e9-82976355ec68}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\Objects\config\Objects.vcxproj">
       <Project>{8a1b6aad-c516-4b51-a93e-6d7b23d449fd}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\classobject.cpp" />
+    <ClCompile Include="..\src\compiler.cpp" />
     <ClCompile Include="..\src\methodobject.cpp" />
     <ClCompile Include="..\src\optable.cpp" />
+    <ClCompile Include="..\src\oscript.cpp" />
     <ClCompile Include="..\src\script_section.cpp" />
     <ClCompile Include="..\src\vm.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\classobject.h" />
+    <ClInclude Include="..\include\compiler.h" />
     <ClInclude Include="..\include\methodobject.h" />
     <ClInclude Include="..\include\optable.h" />
     <ClInclude Include="..\include\oscript.h" />
@@ -44,7 +50,7 @@
     <ProjectGuid>{9D29CCE8-7529-46B6-B110-734FC048599A}</ProjectGuid>
     <RootNamespace>Types</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>oscript</ProjectName>
+    <ProjectName>oscript_lib</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -155,7 +161,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\include;$(ProjectDir)..\..\Types\include;$(ProjectDir)..\..\objects\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\include;$(ProjectDir)..\..\Types\include;$(ProjectDir)..\..\objects\include;$(ProjectDir)..\..\lalr\src</AdditionalIncludeDirectories>
       <BrowseInformation>true</BrowseInformation>
       <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>

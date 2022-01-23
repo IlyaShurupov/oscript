@@ -24,6 +24,12 @@
     <ClCompile Include="..\src\script_section.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\compiler.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\oscript.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\vm.h">
@@ -42,6 +48,9 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\include\oscript.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\compiler.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

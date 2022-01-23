@@ -9,7 +9,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\example\main.cpp">
+    <ClCompile Include="..\src\entry.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>

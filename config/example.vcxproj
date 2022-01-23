@@ -24,7 +24,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\example\main.cpp" />
+    <ClCompile Include="..\src\entry.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -32,7 +32,7 @@
     <ProjectGuid>{E413FB6A-CCE6-4E2C-A4A7-083C31FC884F}</ProjectGuid>
     <RootNamespace>Types</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>example</ProjectName>
+    <ProjectName>osc</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -93,6 +93,7 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(ProjectDir)..\bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)..\bin\.tmp\$(Platform)\$(Configuration)\</IntDir>
+    <TargetName>oscript</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -149,13 +150,16 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\..\Types\lib\Debug;$(ProjectDir)..\..\glfw\lib\x64\debug;$(ProjectDir)..\..\nanovg\lib\x64\Debug;$(ProjectDir)..\..\glew\lib\Debug\x64;$(ProjectDir)..\..\python310\libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>nanovg.lib;types.lib;glfw3.lib;glew32sd.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\Types\lib\Debug;$(ProjectDir)..\..\glfw\lib\x64\debug;$(ProjectDir)..\..\nanovg\lib\x64\Debug;$(ProjectDir)..\..\glew\lib\Debug\x64;$(ProjectDir)..\..\python310\libs;$(ProjectDir)..\..\lalr\lib\x64\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>lalr.lib;nanovg.lib;types.lib;glfw3.lib;glew32sd.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
     <Bscmake>
       <PreserveSbr>true</PreserveSbr>
     </Bscmake>
+    <PostBuildEvent>
+      <Command>python $(ProjectDir)\postbuild.py $(ProjectDir)..\ $(OutDir)</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>

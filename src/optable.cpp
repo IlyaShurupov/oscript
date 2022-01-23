@@ -6,6 +6,22 @@
 
 #include "primitives/stringobject.h"
 
+
+type_method_caller::type_method_caller(Object** in, alni len, Object** out, process* proc)
+	: len(len), in(in), out(out), proc(proc) {
+}
+
+Object* type_method_caller::get(alni idx) {
+	if (idx >= len) {
+		throw 0;
+	}
+	return in[idx];
+}
+
+void type_method_caller::ret(Object* out) {
+	*this->out = out;
+}
+
 void create(process* proc, instruction* inst) {
 	string* typebame = (string*)inst->operand;
 	alni save_adress = inst->args[0];
@@ -17,38 +33,17 @@ void destroy(process* proc, instruction* inst) {
 	NDO->destroy((Object*)proc->cstack[obj_adress]);
 }
 
-struct  type_method_caller : public object_caller {
-
-	alni len;
-	Object** in;
-	Object** out;
-
-	type_method_caller(Object** in, alni len, Object** out) : len(len), in(in), out(out) {
-	}
-
-	Object* get(alni idx) {
-		if (idx >= len) {
-			throw 0;
-		}
-		return in[idx];
-	}
-
-	void ret(Object* out) {
-		*this->out = out;
-	}
-};
-
 void call(process* proc, instruction* inst) {
-	
+
 	alni obj_adress = inst->args[0];
 	alni ret_address = inst->args[1];
 	alni args_address = inst->args[2];
 	alni args_length = inst->args[3];
 	type_method_adress* tm_adress = (type_method_adress*)inst->operand;
-	
+
 	Object* ob = (Object*)proc->cstack[obj_adress];
-	
-	type_method_caller caller((Object**)(proc->cstack.mem + args_address), args_length, (Object**)(proc->cstack.mem + ret_address));
+
+	type_method_caller caller((Object**)(proc->cstack.mem + args_address), args_length, (Object**)(proc->cstack.mem + ret_address), proc);
 	tm_adress(ob, &caller);
 }
 
@@ -60,23 +55,23 @@ void set(process* proc, instruction* inst) {
 	void* val_p = (void*)inst->operand;
 
 	Object* ob = (Object*)proc->cstack[object_adress];
-	
+
 	switch (val_type) {
 
-		case 0: { // int
-			NDO->set(ob, *(alni*)val_p);
-			break;
-		}
-		
-		case 1: { // float
-			NDO->set(ob, *(float*)val_p);
-			break;
-		}
+	case 0: { // int
+		NDO->set(ob, *(alni*)val_p);
+		break;
+	}
 
-		case 2: { // string
-			NDO->set(ob, *(string*)val_p);
-			break;
-		}
+	case 1: { // float
+		NDO->set(ob, *(float*)val_p);
+		break;
+	}
+
+	case 2: { // string
+		NDO->set(ob, *(string*)val_p);
+		break;
+	}
 	}
 }
 
