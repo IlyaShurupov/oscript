@@ -13,3 +13,16 @@ enum opslots {
 };
 
 extern _opearator* object_optable[];
+
+struct  type_method_caller : public object_caller {
+
+	alni len;
+	struct Object** in;
+	Object** out;
+	
+	process* proc;
+
+	type_method_caller(Object** in, alni len, Object** out, process*);
+	Object* get(alni idx);
+	void ret(Object* out);
+};

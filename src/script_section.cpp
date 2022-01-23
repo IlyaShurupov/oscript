@@ -86,7 +86,6 @@ void MemScriptSection::load_script_table_from_file(MemScriptSection* self, File&
 	for (alni i = 0; i < scripts_count; i++) {
 		
 		script_data* new_script = self->new_script();
-		self->scripts.PushBack(new_script);
 		self->abandon_script(new_script);
 
 		//read string object
@@ -115,9 +114,10 @@ script_data* MemScriptSection::get_scritp_from_file_adress(alni file_adress) {
 
 MemScriptSection::~MemScriptSection() {
 	// scripts are not freed
-	//for (auto iter : scripts) {
-		//free(((script_data_head*)(iter.Data()) - 1));
-	//}
+	for (auto iter : scripts) {
+		iter.Data()->bytecode.Free();
+		free(((script_data_head*)(iter.Data()) - 1));
+	}
 }
 
 save_load_callbacks slcb_script_section {

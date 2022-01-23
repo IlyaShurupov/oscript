@@ -25,16 +25,20 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\classobject.cpp" />
+    <ClCompile Include="..\src\compiler.cpp" />
     <ClCompile Include="..\src\methodobject.cpp" />
     <ClCompile Include="..\src\optable.cpp" />
+    <ClCompile Include="..\src\scanner.cpp" />
     <ClCompile Include="..\src\script_section.cpp" />
     <ClCompile Include="..\src\vm.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\classobject.h" />
+    <ClInclude Include="..\include\compiler.h" />
     <ClInclude Include="..\include\methodobject.h" />
     <ClInclude Include="..\include\optable.h" />
     <ClInclude Include="..\include\oscript.h" />
+    <ClInclude Include="..\include\scanner.h" />
     <ClInclude Include="..\include\script_section.h" />
     <ClInclude Include="..\include\vm.h" />
   </ItemGroup>
