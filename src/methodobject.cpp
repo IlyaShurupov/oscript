@@ -4,6 +4,8 @@
 
 #include "script_section.h"
 
+#include "compiler.h"
+
 void MethodObject::constructor(MethodObject* self) {
 	self->script = ScriptSection.new_script();
 	self->script->script = (StringObject*)NDO->create("str");
@@ -50,8 +52,7 @@ static void load(File& file_self, MethodObject* self) {
 
 
 void method_object_compile_script(MethodObject* self, object_caller* caller) {
-	self->script->bytecode.Reserve(1);
-	self->script->bytecode[0] = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+	osc_compile(&self->script->bytecode, &self->script->script->val);
 }
 
 type_method MethodObjectTypeMethods[] = {

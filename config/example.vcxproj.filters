@@ -9,8 +9,9 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\example\main.cpp">
+    <ClCompile Include="..\src\entry.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\types\include\IO\File.cpp" />
   </ItemGroup>
 </Project>

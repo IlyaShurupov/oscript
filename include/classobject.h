@@ -9,7 +9,7 @@ enum ClassObjectTypeMethods {
 };
 
 struct ClassObject : DictObject {
-	
+
 	static void constructor(ClassObject* self);
 	static void copy(ClassObject* self, const ClassObject* in);
 	static void destructor(ClassObject* self);
