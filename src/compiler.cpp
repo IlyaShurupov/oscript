@@ -6,11 +6,68 @@
 
 #include "oscript.h"
 
+#include "oscript_compiler.h"
+
+bool parse_error = false;
 bool initialized = false;
 lalr::GrammarCompiler* g_compiler = NULL;
-lalr::Parser<const char*, int>* parser = NULL;
+lalr::Parser<const char*, code_node*>* parser = NULL;
+oscript_compiler* oscr_comp = NULL;
 
-typedef int (lalr_cb) (const int* data, const lalr::ParserNode<>* nodes, size_t length);
+void rep_err(string err_def, const lalr::ParserNode<>* node, bool terminate = true, string tp = "syntax") {
+  printf("%s error (%i, %i): %s\n", tp.str, node->line(), node->column(), err_def.str);
+  parse_error = true;
+  if (terminate) throw 1;
+}
+
+void check_err(const lalr::ParserNode<>* node) {
+  if (oscr_comp->is_err) {
+    rep_err(oscr_comp->get_last_error(), node, true, "compile");
+  }
+}
+
+// AST nodes
+
+List<struct id_node*> id_nodes;
+
+struct id_node : code_node {
+  string val;
+  id_node(string val) : val(val) {
+    id_nodes.PushBack(this);
+  }
+  ~id_node() {
+  }
+};
+
+
+code_node* create(code_node* const* data, const lalr::ParserNode<>* nodes, size_t length) {
+  code_node* node = oscr_comp->add_node_create(((id_node*)data[0])->val, ((id_node*)data[1])->val);
+  check_err(nodes);
+  return node;
+}
+
+code_node* destroy(code_node* const* data, const lalr::ParserNode<>* nodes, size_t length) {
+  code_node* node = oscr_comp->add_node_destroy(((id_node*)data[1])->val);
+  check_err(nodes);
+  return node;
+}
+
+code_node* identifier(code_node* const* data, const lalr::ParserNode<>* nodes, size_t length) {
+  return new id_node(nodes->lexeme().c_str());
+}
+
+// errors
+
+code_node* missed_semicoloumn(code_node* const* data, const lalr::ParserNode<>* nodes, size_t length) {
+  rep_err("missed ';'", nodes);
+  return NULL;
+}
+
+code_node* invalid_statement(code_node* const* data, const lalr::ParserNode<>* nodes, size_t length) {
+  rep_err("invalid statement", nodes);
+  return NULL;
+}
+
 
 void osc_init() {
 
@@ -18,37 +75,53 @@ void osc_init() {
     return;
   }
 
-  string grammar = read_file("A:/src/oscript/rsc/oscript.grammar");
+  string grammar = read_file("A:/src/oscript/rsc/oscript.cfg");
+  lalr::ErrorPolicy errp;
   g_compiler = new lalr::GrammarCompiler();
-  g_compiler->compile(grammar.str, grammar.str + strlen(grammar.str));
-  parser = new lalr::Parser<const char*, int>(g_compiler->parser_state_machine());
+
+  if (g_compiler->compile(grammar.str, grammar.str + strlen(grammar.str), &errp)) {
+    throw "invalid grammar given";
+  }
+  parser = new lalr::Parser<const char*, code_node*>(g_compiler->parser_state_machine());
 
   parser->parser_action_handlers()
-  ("add", [](const int* data, const lalr::ParserNode<>* nodes, size_t length) {return data[0] + data[2];} )
-  ("subtract", [](const int* data, const lalr::ParserNode<>* nodes, size_t length) {return data[0] - data[2];} )
-  ("multiply", [](const int* data, const lalr::ParserNode<>* nodes, size_t length) {return data[0] * data[2];} )
-  ("divide", [](const int* data, const lalr::ParserNode<>* nodes, size_t length) {return data[0] / data[2];} )
-  ("compound", [](const int* data, const lalr::ParserNode<>* nodes, size_t length) {return data[1];} )
-  ("integer", [](const int* data, const lalr::ParserNode<>* nodes, size_t length) {return ::atoi(nodes[0].lexeme().c_str());} );
+  ("create", create)
+  ("missed_semicoloumn", missed_semicoloumn)
+  ("invalid_statement", invalid_statement)
+  ("identifier", identifier)
+  ("destroy", destroy);
+
+  oscr_comp = new oscript_compiler();
 
   initialized = true;
 }
 
 void osc_compile(code* out, string* oscript) {
 
-  parser->parse(oscript->str, oscript->str + strlen(oscript->str));
-  printf("%i", parser->user_data());
+  parse_error = false;
+  
+  try {
+    id_nodes.Clear();
+    parser->parse(oscript->str, oscript->str + strlen(oscript->str));
+    parse_error = !(parser->accepted() && parser->full());
+  }
+  catch (...) {
+    parse_error = true;
+  }
+  
+  if (parse_error) {
+    printf("\ncompilation failed\n");
+    out->Reserve(1);
+    (*out)[0] = { 0,  0, 0, 0, 0, 0, 0, 0, 0 }; // none op
+  }
 
-  LALR_ASSERT(parser->accepted());
-  LALR_ASSERT(parser->full());
-
-  out->Reserve(1);
-  (*out)[0] = { 0,  0, 0, 0, 0, 0, 0, 0, 0 }; // none op
+  oscr_comp->compile_code(out);
 }
 
 void osc_finalize() {
   delete g_compiler;
   delete parser;
+  delete oscr_comp;
 }
 
 /*

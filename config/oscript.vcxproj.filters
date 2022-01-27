@@ -30,6 +30,9 @@
     <ClCompile Include="..\src\oscript.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\oscipt_compiler.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\vm.h">
@@ -51,6 +54,9 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\include\compiler.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\oscript_compiler.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
