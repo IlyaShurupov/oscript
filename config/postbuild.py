@@ -7,6 +7,11 @@ OutputDir = Path(sys.argv[2])
 
 
 grammar_path = str(Path(str(SolutionDir) + "\\rsc\\oscript.grammar").absolute())
-cmd = "xcopy " + grammar_path + " " + str(OutputDir) + "\\ /Y /H /E /F"
+source_path = str(Path(str(SolutionDir) + "\\rsc\\example.osc").absolute())
+cmd1 = "xcopy " + grammar_path + " " + str(OutputDir) + "\\ /Y /H /E /F"
+cmd2 = "xcopy " + source_path + " " + str(OutputDir) + "\\ /Y /H /E /F"
 
-os.system(cmd)
+print("installing resources")
+
+os.system(cmd1)
+os.system(cmd2)

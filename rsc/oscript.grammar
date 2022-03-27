@@ -1,0 +1,89 @@
+oscript {
+	
+	%whitespace "[ \t\r\n]*";
+	%left '&' '|';
+	%left '+' '-';
+  %left '*' '/';
+  %none num;
+
+	oscript: | get code;
+
+	code: code flowc | flowc;
+
+	get: "get" script_args ";";
+
+	script_args: script_args id | id;
+
+	flowc:
+		code_block |
+		"while" '(' expr_logic ')' flowc |
+		"break" ";"|
+		"if" '(' expr_logic ')' flowc |
+		"else" flowc;
+
+	code_block: '{' statements '}';
+
+	statements: statements stm | stm; 
+	stm:
+		stm_body ';' |
+		var ';' |
+		stm_body [missed_semicoloumn];
+
+	stm_body: 
+		stm_create |
+		stm_destroy |
+		stm_assign |
+		stm_copy |
+		stm_cout |
+		stm_save |
+		stm_load |
+		stm_ret |
+		error [invalid_statement];
+
+	
+	stm_create: id id  [create];
+	stm_destroy: '~' var  [destroy];
+	stm_assign:	var '=' val [assign];
+	stm_copy:	var '=' var  [copy];
+	stm_cout:	'<<' var  [cout];
+	stm_save:	"save" '(' var ',' var ')'  [save];
+	stm_load:	"load" '(' var ',' var ')'  [load];
+	stm_ret:	"return" var;
+
+
+	args: args ',' var | var;
+
+	expr_logic: 
+		var | 
+		expr_logic "&" expr_logic |  
+		expr_logic '|' expr_logic |
+		'(' expr_logic ')' |
+		"!" '(' expr_logic ')';
+
+	var:
+		var '.' id '(' args ')' [type_call] |
+		var '.' id |
+		id;
+
+
+	val: 
+		str [string] |
+		num_expr;
+
+  num_expr:
+	  num_expr '+' num_expr [add] |
+	  num_expr '-' num_expr [subtract] |
+	  num_expr '*' num_expr [multiply] |
+	  num_expr '/' num_expr [divide] |
+	  '(' num_expr ')' [compound] |
+	  num [integer];
+
+	num: int | flt;
+
+	// tokens
+	id: "[a-zA-Z_]+[0-9]*" [identifier];
+	str: "\"[a-zA-Z0-9 \n\r\t]*\"";
+	int: "[0-9]+";
+	flt: "[0-9]+.[0-9]+";
+
+}

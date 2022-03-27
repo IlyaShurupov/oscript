@@ -17,6 +17,6 @@ objects_api* oscript_init() {
 	return oh;
 }
 
-void oscript_finilize() {
+void oscript_finalize() {
 	osc_finalize();
 }

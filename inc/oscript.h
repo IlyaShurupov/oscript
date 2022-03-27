@@ -13,4 +13,4 @@
 #include "compiler.h"
 
 objects_api* oscript_init();
-void oscript_finilize();
+void oscript_finalize();

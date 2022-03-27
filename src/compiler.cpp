@@ -15,7 +15,7 @@ lalr::Parser<const char*, code_node*>* parser = NULL;
 oscript_compiler* oscr_comp = NULL;
 
 void rep_err(string err_def, const lalr::ParserNode<>* node, bool terminate = true, string tp = "syntax") {
-  printf("%s error (%i, %i): %s\n", tp.str, node->line(), node->column(), err_def.str);
+  printf("%s error (%i, %i): %s\n", tp.cstr(), node->line(), node->column(), err_def.cstr());
   parse_error = true;
   if (terminate) throw 1;
 }
@@ -28,7 +28,7 @@ void check_err(const lalr::ParserNode<>* node) {
 
 // AST nodes
 
-List<struct id_node*> id_nodes;
+list<struct id_node*> id_nodes;
 
 struct id_node : code_node {
   string val;
@@ -75,11 +75,11 @@ void osc_init() {
     return;
   }
 
-  string grammar = read_file("A:/src/oscript/rsc/oscript.cfg");
+  string grammar = read_file("oscript.grammar");
   lalr::ErrorPolicy errp;
   g_compiler = new lalr::GrammarCompiler();
 
-  if (g_compiler->compile(grammar.str, grammar.str + strlen(grammar.str), &errp)) {
+  if (g_compiler->compile(grammar.cstr(), grammar.cstr() + strlen(grammar.cstr()), &errp)) {
     throw "invalid grammar given";
   }
   parser = new lalr::Parser<const char*, code_node*>(g_compiler->parser_state_machine());
@@ -102,7 +102,7 @@ void osc_compile(code* out, string* oscript) {
   
   try {
     id_nodes.Clear();
-    parser->parse(oscript->str, oscript->str + strlen(oscript->str));
+    parser->parse(oscript->cstr(), oscript->cstr() + oscript->size());
     parse_error = !(parser->accepted() && parser->full());
   }
   catch (...) {

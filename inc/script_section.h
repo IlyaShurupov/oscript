@@ -6,11 +6,9 @@
 #include "methodobject.h"
 
 struct MemScriptSection {
-	List<script_data*> scripts;
+	list<script_data*> scripts;
 
-	MemScriptSection() {
-		scripts.recursive_free_on_destruction = false;
-	}
+	MemScriptSection() {}
 
 	script_data* new_script();
 	void reference_script(script_data* script);

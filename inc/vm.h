@@ -1,6 +1,7 @@
 #pragma once
 
-#include "types.h"
+#include "list.h"
+#include "array.h"
 
 #define CALL_STACK_SIZE 100
 
@@ -23,7 +24,7 @@ struct call_stack {
 	alni fp = 1;
 	
 	call_stack() {
-		memset(mem, 0, CALL_STACK_SIZE * sizeof(alni));
+		memsetv(&mem, CALL_STACK_SIZE * sizeof(alni), 0);
 	}
 
 	alni& operator[](alni idx) {
@@ -54,7 +55,7 @@ struct process {
 
 struct virtual_machine {
 
-	List<process*> processes;
+	list<process*> processes;
 
 	void run_code(code* in, _opearator** optable);
 };

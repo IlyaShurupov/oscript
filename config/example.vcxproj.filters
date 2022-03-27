@@ -7,11 +7,33 @@
     <Filter Include="source">
       <UniqueIdentifier>{244e60e6-6a13-4a21-96b5-458b2b5f2601}</UniqueIdentifier>
     </Filter>
+    <Filter Include="building">
+      <UniqueIdentifier>{2e3551e4-fe16-4297-9637-06e77696807f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="rsc">
+      <UniqueIdentifier>{04ad309f-936e-41f5-82ce-fb43c9a10123}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\entry.cpp">
+    <ClCompile Include="..\tests\entry.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\types\include\IO\File.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="postbuild.py">
+      <Filter>building</Filter>
+    </None>
+    <None Include="..\rsc\oscript_new.grammar">
+      <Filter>rsc</Filter>
+    </None>
+    <None Include="..\rsc\oscript.grammar">
+      <Filter>rsc</Filter>
+    </None>
+    <None Include="..\rsc\example.osc">
+      <Filter>rsc</Filter>
+    </None>
+    <None Include="..\rsc\example_new.osc">
+      <Filter>rsc</Filter>
+    </None>
   </ItemGroup>
 </Project>
