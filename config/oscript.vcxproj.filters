@@ -35,28 +35,28 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\include\vm.h">
+    <ClInclude Include="..\inc\classobject.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\optable.h">
+    <ClInclude Include="..\inc\compiler.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\methodobject.h">
+    <ClInclude Include="..\inc\methodobject.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\classobject.h">
+    <ClInclude Include="..\inc\optable.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\script_section.h">
+    <ClInclude Include="..\inc\oscript.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\oscript.h">
+    <ClInclude Include="..\inc\oscript_compiler.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\compiler.h">
+    <ClInclude Include="..\inc\script_section.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\oscript_compiler.h">
+    <ClInclude Include="..\inc\vm.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

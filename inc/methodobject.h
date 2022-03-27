@@ -11,7 +11,7 @@ struct script_data {
 };
 
 enum MethodObjectTypeMethods {
-	METHOD_OBJECT_COPILE,
+	METHOD_OBJECT_COMPILE,
 	METHOD_OBJECT_GET_SCRIPT,
 };
 

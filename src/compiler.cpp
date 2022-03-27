@@ -53,7 +53,9 @@ code_node* destroy(code_node* const* data, const lalr::ParserNode<>* nodes, size
 }
 
 code_node* identifier(code_node* const* data, const lalr::ParserNode<>* nodes, size_t length) {
-  return new id_node(nodes->lexeme().c_str());
+  id_node* out = new id_node(nodes->lexeme().c_str());
+  out->val.get_writable();
+  return out;
 }
 
 // errors
