@@ -27,24 +27,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\classobject.cpp" />
-    <ClCompile Include="..\src\oscipt_compiler.cpp" />
-    <ClCompile Include="..\src\compiler.cpp" />
-    <ClCompile Include="..\src\methodobject.cpp" />
-    <ClCompile Include="..\src\optable.cpp" />
-    <ClCompile Include="..\src\oscript.cpp" />
-    <ClCompile Include="..\src\script_section.cpp" />
-    <ClCompile Include="..\src\vm.cpp" />
+    <ClCompile Include="..\src\operators.cpp" />
+    <ClCompile Include="..\src\instruction.cpp" />
+    <ClCompile Include="..\src\process.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\inc\classobject.h" />
-    <ClInclude Include="..\inc\compiler.h" />
-    <ClInclude Include="..\inc\methodobject.h" />
-    <ClInclude Include="..\inc\optable.h" />
-    <ClInclude Include="..\inc\oscript.h" />
-    <ClInclude Include="..\inc\oscript_compiler.h" />
-    <ClInclude Include="..\inc\script_section.h" />
-    <ClInclude Include="..\inc\vm.h" />
+    <ClInclude Include="..\inc\instruction.h" />
+    <ClInclude Include="..\inc\operators.h" />
+    <ClInclude Include="..\inc\process.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

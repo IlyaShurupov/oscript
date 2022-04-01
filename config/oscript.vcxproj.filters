@@ -9,54 +9,24 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\vm.cpp">
+    <ClCompile Include="..\src\instruction.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\optable.cpp">
+    <ClCompile Include="..\src\process.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\methodobject.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\classobject.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\script_section.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\compiler.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\oscript.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\oscipt_compiler.cpp">
+    <ClCompile Include="..\src\operators.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\inc\classobject.h">
+    <ClInclude Include="..\inc\process.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\inc\compiler.h">
+    <ClInclude Include="..\inc\operators.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\inc\methodobject.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\inc\optable.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\inc\oscript.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\inc\oscript_compiler.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\inc\script_section.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\inc\vm.h">
+    <ClInclude Include="..\inc\instruction.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
