@@ -1,6 +1,9 @@
-int main(int h, int g) {
+bool main(int i1, flt f1) {
+	
+	sd = ds;
 
-	int g = df.sad();
+	flt2 f2 = df.sad();
+
 	~g = a;
 
 	if (asd) {
@@ -9,8 +12,9 @@ int main(int h, int g) {
 		~g = a;
 
 		g.get(g.get(a, b, c) = g.get(a, b, c), asd, asdcall_args) + 10.0;
-		g.get(g.get(a, b, c) = g.get(a, b, c), asd, asdcall_args) + 10.0;
+
 	} else {
+
 		g.get(g.get(a, b, c) = g.get(a, b, c), asd, asdcall_args) + 10.0;
 		g.get(g.get(a, b, c) = g.get(a, b, c), asd, asdcall_args) + 10.0;
 

@@ -1,38 +1,29 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="include">
-      <UniqueIdentifier>{70c16cf9-1d9b-4a73-a8e4-ba3fd19884c8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="source">
-      <UniqueIdentifier>{244e60e6-6a13-4a21-96b5-458b2b5f2601}</UniqueIdentifier>
-    </Filter>
     <Filter Include="building">
       <UniqueIdentifier>{2e3551e4-fe16-4297-9637-06e77696807f}</UniqueIdentifier>
     </Filter>
     <Filter Include="rsc">
       <UniqueIdentifier>{04ad309f-936e-41f5-82ce-fb43c9a10123}</UniqueIdentifier>
     </Filter>
+    <Filter Include="inc">
+      <UniqueIdentifier>{70c16cf9-1d9b-4a73-a8e4-ba3fd19884c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{244e60e6-6a13-4a21-96b5-458b2b5f2601}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\tests\entry.cpp">
-      <Filter>source</Filter>
+      <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="postbuild.py">
       <Filter>building</Filter>
     </None>
-    <None Include="..\rsc\oscript_new.grammar">
-      <Filter>rsc</Filter>
-    </None>
-    <None Include="..\rsc\oscript.grammar">
-      <Filter>rsc</Filter>
-    </None>
-    <None Include="..\rsc\example.osc">
-      <Filter>rsc</Filter>
-    </None>
-    <None Include="..\rsc\example_new.osc">
+    <None Include="..\rsc\example.os">
       <Filter>rsc</Filter>
     </None>
   </ItemGroup>

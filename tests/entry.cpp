@@ -1,21 +1,23 @@
 
-#include "oscript.h"
+
+#include "compiler.h"
+
+#include "process.h"
+
+using namespace oscript;
 
 int main(int argc, char* argv[]) {
+
   if (argc < 2) {
     return 1;
   }
 
-  string script = read_file(argv[1]);
+  compiler cp;
+  process proc;
+  proc.fb = cp.compile(read_file(argv[1]));
 
-  oscript_init();
-  virtual_machine vm;
+  proc.run();
 
-  code bytecode;
-  osc_compile(&bytecode, &script);
-
-  vm.run_code(&bytecode, object_optable);
-
-  oscript_finalize();
+  delete proc.fb;
   return 0;
 }

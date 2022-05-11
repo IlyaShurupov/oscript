@@ -27,14 +27,25 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\operators.cpp" />
-    <ClCompile Include="..\src\instruction.cpp" />
+    <ClCompile Include="..\src\callstack.cpp" />
+    <ClCompile Include="..\src\bytecode.cpp" />
+    <ClCompile Include="..\src\compiler.cpp" />
+    <ClCompile Include="..\src\treecode.cpp" />
+    <ClCompile Include="..\src\irep.cpp" />
+    <ClCompile Include="..\src\parser.cpp" />
     <ClCompile Include="..\src\process.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\inc\instruction.h" />
-    <ClInclude Include="..\inc\operators.h" />
+    <ClInclude Include="..\inc\bytecode.h" />
+    <ClInclude Include="..\inc\callstack.h" />
+    <ClInclude Include="..\inc\compiler.h" />
+    <ClInclude Include="..\inc\treecode.h" />
+    <ClInclude Include="..\inc\irep.h" />
+    <ClInclude Include="..\inc\parser.h" />
     <ClInclude Include="..\inc\process.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\rsc\oscript.grammar" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

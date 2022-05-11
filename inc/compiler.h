@@ -1,9 +1,17 @@
 #pragma once
 
-#include "vm.h"
+#include "parser.h"
+#include "treecode.h"
 
-#include "strings.h"
+// oscript root namespace
+namespace oscript {
 
-void osc_init();
-void osc_compile(code* out, string* oscript);
-void osc_finalize();
+	struct compiler {
+		parser pars;
+		treecode main_node;
+
+		compiler();
+		fbody* compile(const string& oscript);
+		~compiler();
+	};
+};

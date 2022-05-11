@@ -1,87 +1,65 @@
 oscript {
 	
 	%whitespace "[ \t\r\n]*";
-	%left '&' '|';
+	%left '&' '|' '==' '<' '>';
 	%left '+' '-';
   %left '*' '/';
+  %left '.' '(' ';' "return" "~";
+  %right '=';
   %none num;
 
-	oscript: | get code;
+  // main production
+	oscript: function_def;
+ 	
+	function_def: id "main" '(' func_args ')' scope;
 
-	code: code flowc | flowc;
+	code: code code_block | code_block;
+	scope: '{' code '}';
 
-	get: "get" script_args ";";
+	code_block: 
+		scope |
+		expr ';' |
 
-	script_args: script_args id | id;
+		"while" '(' expr ')' scope |
+		"if" '(' expr ')' scope else
+	;
 
-	flowc:
-		code_block |
-		"while" '(' expr_logic ')' flowc |
-		"break" ";"|
-		"if" '(' expr_logic ')' flowc |
-		"else" flowc;
+	else: | "else" scope;
 
-	code_block: '{' statements '}';
+  call_args: | call_args ',' expr | expr;
+  func_args: | func_args ',' id id | id id;
 
-	statements: statements stm | stm; 
-	stm:
-		stm_body ';' |
-		var ';' |
-		stm_body [missed_semicoloumn];
+  expr:
+	  expr '+' expr [ast_node] | 
+	  expr '-' expr |
+	  expr '*' expr |
+	  expr '/' expr |
+	  expr '=' expr |
+	  '(' expr ')' |
 
-	stm_body: 
-		stm_create |
-		stm_destroy |
-		stm_assign |
-		stm_copy |
-		stm_cout |
-		stm_save |
-		stm_load |
-		stm_ret |
-		error [invalid_statement];
+	  expr '==' expr |
+	  expr '<' expr |
+	  expr '>' expr |
+	  "!" '(' expr ')' |
+	  expr "&" expr |  
+		expr '|' expr |
+	  
+	  expr '(' call_args ')' |
+	  expr '.' id |
+		
+	  "return" expr |
+	  "break" |
+	  "~" expr |
+	  id id |
 
-	
-	stm_create: id id  [create];
-	stm_destroy: '~' var  [destroy];
-	stm_assign:	var '=' val [assign];
-	stm_copy:	var '=' var  [copy];
-	stm_cout:	'<<' var  [cout];
-	stm_save:	"save" '(' var ',' var ')'  [save];
-	stm_load:	"load" '(' var ',' var ')'  [load];
-	stm_ret:	"return" var;
+		id | val
+	;
 
-
-	args: args ',' var | var;
-
-	expr_logic: 
-		var | 
-		expr_logic "&" expr_logic |  
-		expr_logic '|' expr_logic |
-		'(' expr_logic ')' |
-		"!" '(' expr_logic ')';
-
-	var:
-		var '.' id '(' args ')' [type_call] |
-		var '.' id |
-		id;
-
-
-	val: 
-		str [string] |
-		num_expr;
-
-  num_expr:
-	  num_expr '+' num_expr [add] |
-	  num_expr '-' num_expr [subtract] |
-	  num_expr '*' num_expr [multiply] |
-	  num_expr '/' num_expr [divide] |
-	  '(' num_expr ')' [compound] |
-	  num [integer];
-
+	val: str | num;
 	num: int | flt;
 
 	// tokens
-	id: "[a-zA-Z_]+[0-9]*" [identifier];
+	id: "[a-zA-Z_]+[0-9]*";
 	str: "\"[a-zA-Z0-9 \n\r\t]*\"";
 	int: "[0-9]+";
 	flt: "[0-9]+.[0-9]+";

@@ -24,10 +24,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\rsc\example.osc" />
-    <None Include="..\rsc\example_new.osc" />
-    <None Include="..\rsc\oscript_new.grammar" />
-    <None Include="..\rsc\oscript.grammar" />
+    <None Include="..\rsc\example.os" />
     <None Include="postbuild.py" />
   </ItemGroup>
   <ItemGroup>

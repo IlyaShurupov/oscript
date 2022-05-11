@@ -1,33 +1,77 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="include">
+    <Filter Include="compiler">
+      <UniqueIdentifier>{bc68390c-5392-4c2f-a033-a9b2b5355809}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core">
+      <UniqueIdentifier>{fdb4dc97-ffff-4b44-a895-2c1761a4914f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\src">
+      <UniqueIdentifier>{244e60e6-6a13-4a21-96b5-458b2b5f2601}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\inc">
       <UniqueIdentifier>{70c16cf9-1d9b-4a73-a8e4-ba3fd19884c8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="source">
-      <UniqueIdentifier>{244e60e6-6a13-4a21-96b5-458b2b5f2601}</UniqueIdentifier>
+    <Filter Include="compiler\inc">
+      <UniqueIdentifier>{18de8c76-cd91-460e-95ef-c70d7d2e2281}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="compiler\src">
+      <UniqueIdentifier>{fda7be11-073c-49fd-a385-cd3f223f7dec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="compiler\rsc">
+      <UniqueIdentifier>{95678833-7b87-4cb3-a55e-c78137855c1d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\instruction.cpp">
-      <Filter>source</Filter>
+    <ClCompile Include="..\src\bytecode.cpp">
+      <Filter>core\src</Filter>
     </ClCompile>
     <ClCompile Include="..\src\process.cpp">
-      <Filter>source</Filter>
+      <Filter>core\src</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\operators.cpp">
-      <Filter>source</Filter>
+    <ClCompile Include="..\src\callstack.cpp">
+      <Filter>core\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\treecode.cpp">
+      <Filter>compiler\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\parser.cpp">
+      <Filter>compiler\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\irep.cpp">
+      <Filter>compiler\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\compiler.cpp">
+      <Filter>compiler\src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\inc\process.h">
-      <Filter>include</Filter>
+      <Filter>core\inc</Filter>
     </ClInclude>
-    <ClInclude Include="..\inc\operators.h">
-      <Filter>include</Filter>
+    <ClInclude Include="..\inc\callstack.h">
+      <Filter>core\inc</Filter>
     </ClInclude>
-    <ClInclude Include="..\inc\instruction.h">
-      <Filter>include</Filter>
+    <ClInclude Include="..\inc\bytecode.h">
+      <Filter>core\inc</Filter>
     </ClInclude>
+    <ClInclude Include="..\inc\treecode.h">
+      <Filter>compiler\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\parser.h">
+      <Filter>compiler\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\irep.h">
+      <Filter>compiler\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\compiler.h">
+      <Filter>compiler\inc</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\rsc\oscript.grammar">
+      <Filter>compiler\rsc</Filter>
+    </None>
   </ItemGroup>
 </Project>
