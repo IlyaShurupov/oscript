@@ -6,6 +6,8 @@
 
 using namespace oscript;
 
+lalr::ErrorPolicy errp;
+
 ast_node* lalr_gen_ast_node(ast_node* const* data, const lalr::ParserNode<>* nodes, size_t length) {
 	ast_node* node = new ast_node();
 	node->terminal = false;
@@ -32,13 +34,12 @@ ast_node* lalr_gen_ast_node(ast_node* const* data, const lalr::ParserNode<>* nod
 
 parser::parser(const string& grammar) {
 
-	lalr::ErrorPolicy errp;
 	lalr::GrammarCompiler* gcomp = new lalr::GrammarCompiler();
 
 	halni errors = gcomp->compile(grammar.cstr(), grammar.cstr() + strlen(grammar.cstr()), &errp);
 	assert(!errors && "invalid grammar given");
 
-	lalr::Parser<const char*, ast_node*>* pars = new lalr::Parser<const char*, ast_node*>(gcomp->parser_state_machine());
+	lalr::Parser<const char*, ast_node*>* pars = new lalr::Parser<const char*, ast_node*>(gcomp->parser_state_machine(), &errp);
 
 	pars->set_default_action_handler(lalr_gen_ast_node);
 	//pars->parser_action_handlers()("ast_node", );

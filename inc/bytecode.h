@@ -2,7 +2,7 @@
 
 #include "array.h"
 
-struct callstack;
+class callstack;
 
 // oscript instruction
 namespace inst {
@@ -10,11 +10,14 @@ namespace inst {
 	enum class itype {
 		NONE,
 		CREATE,
-		DESTROY,
 		SAVE,
 		LOAD,
 		WRITE,
 		CALL,
+		RESERVE,
+		PUSH,
+		RET,
+		DESTROY,
 	};
 
 	// instruction argumentgs
@@ -60,6 +63,11 @@ struct fbody {
 	void icreate(callstack* cs, inst::iargs::cdp otype, inst::iargs::csl local_ret);
 	void iwrite(callstack* cs, inst::iargs::cdp writeblock, inst::iargs::csl local_write);
 	void isave(callstack* cs, inst::iargs::csl local_target, inst::iargs::csl local_path);
-	void idestroy(callstack* cs, inst::iargs::csl local_target);
-	void iloadop(callstack* cs, inst::iargs::csl local_ret, inst::iargs::csl local_path);
+	void iload(callstack* cs, inst::iargs::csl local_ret, inst::iargs::csl local_path);
+	void idestroy(callstack* cs, inst::iargs::csl local_rem);
+
+	void ipush(callstack* cs, inst::iargs::csl local_arg);
+	void ireserve(callstack* cs, uint1 n_locals);
+	void icall(callstack* cs, inst::iargs::cdp callable_name, inst::iargs::csl local_callable_self);
+	void iret(callstack* cs, inst::iargs::csl local_ret, inst::iargs::csl ret_adress);
 };

@@ -40,12 +40,28 @@ void fbody::exec(callstack* cs) {
 			isave(cs, bc.fetch_csl(), bc.fetch_csl());
 			break;
 
-		case inst::itype::DESTROY:
-			idestroy(cs, bc.fetch_csl());
+		case inst::itype::LOAD:
+			iload(cs, bc.fetch_csl(), bc.fetch_csl());
 			break;
 
-		case inst::itype::LOAD:
-			iloadop(cs, bc.fetch_csl(), bc.fetch_csl());
+		case inst::itype::CALL:
+			//icall(cs, bc.fetch_csl());
+			break;
+
+		case inst::itype::RESERVE:
+			ireserve(cs, bc.fetch_csl());
+			break;
+
+		case inst::itype::PUSH:
+			ipush(cs, bc.fetch_csl());
+			break;
+
+		case inst::itype::RET:
+			iret(cs, bc.fetch_csl(), bc.fetch_csl());
+			break;
+
+		case inst::itype::DESTROY:
+			idestroy(cs, bc.fetch_csl());
 			break;
 
 		case inst::itype::NONE:
@@ -55,17 +71,21 @@ void fbody::exec(callstack* cs) {
 	}
 }
 
+void fbody::idestroy(callstack* cs, inst::iargs::csl local_del) {
+	Object** retp = &cs->get(local_del);
+	NDO->destroy(*retp);
+}
 
 void fbody::icreate(callstack* cs, inst::iargs::cdp otype, inst::iargs::csl local_ret) {
 	string* stype = cd.get<string>(otype);
-	Object** retp = cs->local(local_ret);
+	Object** retp = &cs->get(local_ret);
 	*retp = NDO->create(stype->cstr());
 }
 
 // struct writeblock<Type> { uint1 dt { INT = 0, FLOAT, BOOL, STRING }; Type rawdata; };
 void fbody::iwrite(callstack* cs, inst::iargs::cdp writeblock, inst::iargs::csl local_write) {
 	uint1* writeblock_type = cd.get<uint1>(writeblock);
-	Object** targetp = cs->local(local_write);
+	Object** targetp = &cs->get(local_write);
 	void* rawdata = (void*) (writeblock_type + 1);
 
 	assert(targetp && *targetp);
@@ -89,36 +109,38 @@ void fbody::iwrite(callstack* cs, inst::iargs::cdp writeblock, inst::iargs::csl 
 }
 
 void fbody::isave(callstack* cs, inst::iargs::csl local_target, inst::iargs::csl local_path) {
-	StringObject** path = (StringObject**) cs->local(local_path);
-	Object** objp = cs->local(local_target);
+	StringObject** path = (StringObject**) &cs->get(local_path);
+	Object** objp = &cs->get(local_target);
 	NDO_CAST_ASSERT(StringObject, *path);
 	assert(objp && *objp);
 	NDO->save(*objp, (*path)->val);
 }
 
-void fbody::idestroy(callstack* cs, inst::iargs::csl local_target) {
-	Object** ret = cs->local(local_target);
-	assert(ret && *ret);
-	NDO->destroy(*ret);
-}
-
-void fbody::iloadop(callstack* cs, inst::iargs::csl local_ret, inst::iargs::csl local_path) {
-	StringObject** path = (StringObject**) cs->local(local_path);
-	Object** ret = cs->local(local_ret);
+void fbody::iload(callstack* cs, inst::iargs::csl local_ret, inst::iargs::csl local_path) {
+	StringObject** path = (StringObject**) &cs->get(local_path);
+	Object** ret = &cs->get(local_ret);
 	NDO_CAST_ASSERT(StringObject, *path);
 	*ret = NDO->load((*path)->val);
 }
 
 
-/*
-void tmpushret::operator()(process* instf) { instf->pushret(ret); }
+void fbody::icall(callstack* cs, inst::iargs::cdp callable_name, inst::iargs::csl loca_callable_self) {
+	/*
+	Object* targeto = cs->get(loca_callable_self);
+	string* smethodid = cd.get<string>(callable_name);
 
-void tmpusharg::operator()(process* instf) { instf->pusharg(arg); }
+	assert(targeto && smethodid);
 
-void tmcallop::operator()(process* instf) {
-	Object* targeto = *instf->get_objaddr(target);
-	string* smethodid = instf->get_datap(methodid)->gets();
-	assert(targeto);
+	struct tmcaller : public object_caller {
+
+		Object* get(alni idx) override {
+
+		}
+
+		void ret(Object*) override {
+
+		}
+	};
 
 	// replace with dictinary
 	for (type_method* iter = targeto->type->methods; iter; iter++) {
@@ -126,5 +148,19 @@ void tmcallop::operator()(process* instf) {
 			iter->adress(targeto, instf);
 		}
 	}
+
+	//cs->call(cd.get<string>(callable_name), loca_callable_self);
+	*/
 }
-*/
+
+void fbody::ireserve(callstack* cs, uint1 n_locals) {
+
+}
+
+void fbody::ipush(callstack* cs, inst::iargs::csl local_arg) {
+	//cs->push_arg(local_arg);
+}
+
+void fbody::iret(callstack* cs, inst::iargs::csl local_ret, inst::iargs::csl ret_adress) {
+	//cs->ret(local_ret, ret_adress);
+}
