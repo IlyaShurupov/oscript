@@ -1,10 +1,10 @@
 oscript {
 	
 	%whitespace "[ \t\r\n]*";
-	%left '&' '|' '==' '<' '>';
+	%left '&&' '||' '==' '>';
 	%left '+' '-';
   %left '*' '/';
-  %left '.' '(' ';' "return" "~";
+  %left '.' '(' ';' "return";
   %right '=';
   %none num;
 
@@ -29,29 +29,45 @@ oscript {
   call_args: | call_args ',' expr | expr;
   func_args: | func_args ',' id id | id id;
 
+	// expretions. sourse of bytecode
   expr:
-	  expr '+' expr [ast_node] | 
+		creation_expr | 
+		ariphmetic_expr |
+	  boolean_ariphm_expr |
+	  get_expr | 
+	  call_expr |
+		control_flow_expr
+	;
+
+	get_expr: expr '.' id;
+	
+	call_expr: expr '(' call_args ')';
+	
+	ariphmetic_expr:
+	  expr '+' expr | 
 	  expr '-' expr |
 	  expr '*' expr |
 	  expr '/' expr |
 	  expr '=' expr |
-	  '(' expr ')' |
-
+	  '(' expr ')'
+	;
+	
+	boolean_ariphm_expr:
 	  expr '==' expr |
-	  expr '<' expr |
 	  expr '>' expr |
 	  "!" '(' expr ')' |
-	  expr "&" expr |  
-		expr '|' expr |
-	  
-	  expr '(' call_args ')' |
-	  expr '.' id |
-		
-	  "return" expr |
-	  "break" |
-	  "~" expr |
+	  expr "&&" expr |  
+		expr '||' expr
+	;
+	
+	control_flow_expr:
+		"return" expr |
+		"return" |
+	  "break"
+	;
+	
+	creation_expr:
 	  id id |
-
 		id | val
 	;
 
@@ -63,5 +79,4 @@ oscript {
 	str: "\"[a-zA-Z0-9 \n\r\t]*\"";
 	int: "[0-9]+";
 	flt: "[0-9]+.[0-9]+";
-
 }

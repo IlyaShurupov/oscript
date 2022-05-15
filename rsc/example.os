@@ -2,18 +2,18 @@
 
 bool main(int arg1, flt arg2) {
 	
-	int i;
-	flt f1;
+	dict wd;
+	flt i1 = 5.5;
 
-	if (i1) {
-		~i1;
+	bool suc = wd.put("my int", i1);
+
+	if (suc) {
+		return;
 	} else { 
+
 		while (0.0) {
 			int i2;
-			~i2;
+			i2 = 10.4;
 		} 
 	}
-
-	~i1;
-	~i2;
 }

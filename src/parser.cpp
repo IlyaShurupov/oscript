@@ -12,7 +12,7 @@ ast_node* lalr_gen_ast_node(ast_node* const* data, const lalr::ParserNode<>* nod
 	ast_node* node = new ast_node();
 	node->terminal = false;
 
-	for (alni idx = 0; idx < length; idx++) {
+	for (alni idx = 0; idx < (alni)length; idx++) {
 		if (nodes[idx].symbol()->type == lalr::SYMBOL_NON_TERMINAL) {
 			data[idx]->type = nodes[idx].symbol()->identifier;
 			data[idx]->type.capture();

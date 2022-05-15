@@ -15,38 +15,76 @@ namespace oscript {
 
 	struct id_node {
 		string id;
-		void read(const ast_node& node, const irep_error& err) {
-			err.ensure(node.type == "id", "expected identifier");
-			id = node.value;
-		}
+		void read(const ast_node& node, const irep_error& err);
 	};
 
 	struct value_node {
 		string val;
-		void read(const ast_node& node, const irep_error& err) {
-			val = node.value;
-		}
-	};
-
-	struct create_expr_node {
-		id_node type;
-		id_node name;
 		void read(const ast_node& node, const irep_error& err);
 	};
 
-	struct destroy_expr_node {
-		struct expr_node* del_expr = NULL;
+	struct creation_expr_node {
+		bool raw;
+		string type;
+		string name;
+		value_node val;
 		void read(const ast_node& node, const irep_error& err);
-		~destroy_expr_node();
+	};
+
+	struct ariphmetic_expr_node {
+		enum class type { ASSIGN, ADD, SUB, MUL, DIV, ENCAPS, NONE } tp = type::NONE;
+		struct expr_node* left = NULL;
+		expr_node* right = NULL;
+
+		void read(const ast_node& node, const irep_error& err);
+		~ariphmetic_expr_node();
+	};
+
+	struct boolean_ariphmetic_expr_node {
+		enum class type { EQUAL, GRATER, NOT, AND, OR, NONE } tp = type::NONE;
+		expr_node* left = NULL;
+		expr_node* right = NULL;
+
+		void read(const ast_node& node, const irep_error& err);
+		~boolean_ariphmetic_expr_node();
+	};
+
+	struct call_expr_node {
+		expr_node* callable;
+		Array<expr_node*> args;
+
+		call_expr_node();
+		void read_args(const ast_node& node, const irep_error& err);
+		void read(const ast_node& node, const irep_error& err);
+		~call_expr_node();
+	};
+
+	struct get_expr_node {
+		expr_node* expr = NULL;
+		id_node childname;
+
+		get_expr_node();
+		void read(const ast_node& node, const irep_error& err);
+		~get_expr_node();
+	};
+
+	struct control_flow_expr_node {
+		enum class type { RETURN, RETURN_NONE, BREAK, NONE } tp = type::NONE;
+		expr_node* expr = NULL;
+
+		void read(const ast_node& node, const irep_error& err);
+		~control_flow_expr_node();
 	};
 
 	struct expr_node {
-		enum class type { CREATE, DESTROY, ID, VALUE, NONE } tp = type::NONE;
+		enum class type { CREATION, ARIPHM, BOOL_ARIPHM, CALL, GET, CFLOW, NONE } tp = type::NONE;
 		union {
-			create_expr_node create;
-			destroy_expr_node destroy;
-			id_node id;
-			value_node value;
+			creation_expr_node create;
+			ariphmetic_expr_node ariphm;
+			boolean_ariphmetic_expr_node boolean_ariphm;
+			call_expr_node call;
+			get_expr_node get;
+			control_flow_expr_node cflow;
 		};
 		expr_node();
 		expr_node(const expr_node& in);
@@ -110,10 +148,9 @@ namespace oscript {
 
 	struct treecode {
 		function_node entry;
+
 		void read(const ast_node& node, const irep_error& err);
 
-		void evaluate(fbody*) {
-			return;
-		}
+		void evaluate(fbody*);
 	};
 };

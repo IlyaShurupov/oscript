@@ -5,10 +5,14 @@
 #include "process.h"
 
 #include "methodobject.h"
+#include "primitives/primitives.h"
 
 using namespace oscript;
 
 int main(int argc, char* argv[]) {
+
+  objects_init();
+  primitives_define_types();
 
   NDO->define(&MethodObjectType);
   NDO->add_sl_callbacks(&slcb_script_section);
@@ -24,5 +28,7 @@ int main(int argc, char* argv[]) {
   proc.run();
 
   delete proc.fb;
+
+  objects_finalize();
   return 0;
 }

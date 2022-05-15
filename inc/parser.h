@@ -16,6 +16,9 @@ namespace oscript {
 				delete child.Data();
 			}
 		}
+
+		alni plen() const { return childs.Len(); }
+		const ast_node& operator[](alni idx) const { return *childs[idx]; }
 	};
 
 	struct parser {
