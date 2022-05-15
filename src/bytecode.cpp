@@ -8,6 +8,9 @@
 #include "object/object.h"
 #include "primitives/stringobject.h"
 
+#include "primitives/dictobject.h"
+#include "methodobject.h"
+
 inst::itype bytecode::fetch_itype() {
 	auto it = (inst::itype*) &buff[ip];
 	ip += sizeof(inst::itype);
@@ -45,7 +48,7 @@ void fbody::exec(callstack* cs) {
 			break;
 
 		case inst::itype::CALL:
-			//icall(cs, bc.fetch_csl());
+			icall(cs, bc.fetch_cd(), bc.fetch_csl());
 			break;
 
 		case inst::itype::RESERVE:
@@ -57,11 +60,19 @@ void fbody::exec(callstack* cs) {
 			break;
 
 		case inst::itype::RET:
-			iret(cs, bc.fetch_csl(), bc.fetch_csl());
+			iret(cs, bc.fetch_csl());
 			break;
 
 		case inst::itype::DESTROY:
 			idestroy(cs, bc.fetch_csl());
+			break;
+
+		case inst::itype::MOVE:
+			imove(cs, bc.fetch_csl(), bc.fetch_csl());
+			break;
+
+		case inst::itype::JUMP:
+			ijump(cs, bc.fetch<int2>());
 			break;
 
 		case inst::itype::NONE:
@@ -123,18 +134,35 @@ void fbody::iload(callstack* cs, inst::iargs::csl local_ret, inst::iargs::csl lo
 	*ret = NDO->load((*path)->val);
 }
 
+void fbody::ijump(callstack* cs, int2 offset) {
+	cs->jump(offset);
+}
+
+void fbody::imove(callstack* cs, inst::iargs::csl local_from, inst::iargs::csl local_to) {
+	cs->get(local_to) = cs->get(local_from);
+}
 
 void fbody::icall(callstack* cs, inst::iargs::cdp callable_name, inst::iargs::csl loca_callable_self) {
-	/*
 	Object* targeto = cs->get(loca_callable_self);
 	string* smethodid = cd.get<string>(callable_name);
 
 	assert(targeto && smethodid);
 
+	if (targeto->type == &DictObjectType) {
+		NDO_CASTV(DictObject, targeto, dicto);	
+		auto method_obj_idx = dicto->items.Presents(smethodid);
+		if (method_obj_idx) {
+			assert(dicto->items[method_obj_idx]->type == &MethodObjectType && "cant call non method object");
+			NDO_CASTV(MethodObject, dicto->items[method_obj_idx], methodo);
+			cs->call(&methodo->script->code);
+			return;
+		}
+	} 
+
 	struct tmcaller : public object_caller {
 
 		Object* get(alni idx) override {
-
+			return NULL;
 		}
 
 		void ret(Object*) override {
@@ -142,25 +170,27 @@ void fbody::icall(callstack* cs, inst::iargs::cdp callable_name, inst::iargs::cs
 		}
 	};
 
+	tmcaller caller;
+
 	// replace with dictinary
 	for (type_method* iter = targeto->type->methods; iter; iter++) {
 		if (iter->name == *smethodid) {
-			iter->adress(targeto, instf);
+			iter->adress(targeto, &caller);
+			return;
 		}
 	}
 
-	//cs->call(cd.get<string>(callable_name), loca_callable_self);
-	*/
+	assert(0 && "unhandled flow");
 }
 
 void fbody::ireserve(callstack* cs, uint1 n_locals) {
-
+	cs->reserve_locals(n_locals);
 }
 
 void fbody::ipush(callstack* cs, inst::iargs::csl local_arg) {
-	//cs->push_arg(local_arg);
+	cs->pass_to_next_frame(cs->get(local_arg));
 }
 
-void fbody::iret(callstack* cs, inst::iargs::csl local_ret, inst::iargs::csl ret_adress) {
-	//cs->ret(local_ret, ret_adress);
+void fbody::iret(callstack* cs, inst::iargs::csl local_ret) {
+	cs->return_from_frame(cs->get(local_ret));
 }

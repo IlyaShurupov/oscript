@@ -112,8 +112,8 @@ namespace oscript {
 		function_node entry;
 		void read(const ast_node& node, const irep_error& err);
 
-		fbody* evaluate() {
-			return NULL;
+		void evaluate(fbody*) {
+			return;
 		}
 	};
 };

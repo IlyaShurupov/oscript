@@ -45,6 +45,12 @@
     <ClCompile Include="..\src\compiler.cpp">
       <Filter>compiler\src</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\methodobject.cpp">
+      <Filter>core\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\script_section.cpp">
+      <Filter>core\src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\inc\process.h">
@@ -67,6 +73,12 @@
     </ClInclude>
     <ClInclude Include="..\inc\compiler.h">
       <Filter>compiler\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\methodobject.h">
+      <Filter>core\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\script_section.h">
+      <Filter>core\inc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

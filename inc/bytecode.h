@@ -18,6 +18,8 @@ namespace inst {
 		PUSH,
 		RET,
 		DESTROY,
+		JUMP,
+		MOVE
 	};
 
 	// instruction argumentgs
@@ -29,12 +31,11 @@ namespace inst {
 
 // const data sector
 struct constdata {
-	uint1* mem = NULL;
-
+	Array<uint1> mem;
+	
 	template <typename Type>
 	Type* get(inst::iargs::cdp idx) {
-		assert(mem);
-		return (Type*) (mem + idx);
+		return (Type*) &mem[idx];
 	}
 };
 
@@ -47,6 +48,13 @@ struct bytecode {
 	inst::itype fetch_itype();
 	inst::iargs::cdp fetch_cd();
 	inst::iargs::csl fetch_csl();
+
+	template <typename Type>
+	Type& fetch() {
+		auto out = (Type*) &buff[ip];
+		ip += sizeof(Type);
+		return *out;
+	}
 };
 
 // compilation unit
@@ -66,8 +74,10 @@ struct fbody {
 	void iload(callstack* cs, inst::iargs::csl local_ret, inst::iargs::csl local_path);
 	void idestroy(callstack* cs, inst::iargs::csl local_rem);
 
+	void ijump(callstack* cs, int2 offset);
+	void imove(callstack* cs, inst::iargs::csl local_from, inst::iargs::csl local_to);
 	void ipush(callstack* cs, inst::iargs::csl local_arg);
 	void ireserve(callstack* cs, uint1 n_locals);
 	void icall(callstack* cs, inst::iargs::cdp callable_name, inst::iargs::csl local_callable_self);
-	void iret(callstack* cs, inst::iargs::csl local_ret, inst::iargs::csl ret_adress);
+	void iret(callstack* cs, inst::iargs::csl local_ret);
 };

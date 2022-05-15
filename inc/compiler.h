@@ -11,7 +11,7 @@ namespace oscript {
 		treecode main_node;
 
 		compiler();
-		fbody* compile(const string& oscript);
+		void compile(const string& oscript, struct fbody*);
 		~compiler();
 	};
 };

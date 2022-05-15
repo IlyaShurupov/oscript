@@ -18,6 +18,7 @@
     <ClCompile Include="..\tests\entry.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\script_section.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="postbuild.py">

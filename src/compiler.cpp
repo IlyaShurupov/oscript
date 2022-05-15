@@ -5,15 +5,17 @@ using namespace oscript;
 
 compiler::compiler() : pars(read_file("oscript.grammar")) {}
 
-fbody* compiler::compile(const string& oscript) {
+void compiler::compile(const string& oscript, fbody* out) {
+	assert(out);
+
 	ast_node* ast = pars.parse(oscript);
 
 	if (!ast) {
-		return NULL;
+		return;
 	}
 
 	main_node.read(*ast, irep_error());
-	return main_node.evaluate();
+	main_node.evaluate(out);
 }
 
 compiler::~compiler() {}
