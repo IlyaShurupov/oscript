@@ -15,8 +15,8 @@ void value_node::read(const ast_node& node, const irep_error& err) {
 void creation_expr_node::read(const ast_node& node, const irep_error& err) {
 	raw = node.plen() == 1;
 	if (!raw) {
-		type = node[0].value;
-		name = node[1].value;
+		type.read(node[0], err);
+		name.read(node[1], err);
 	} else {
 		val.read(node[0], err);
 	}
@@ -155,6 +155,7 @@ void control_flow_expr_node::read(const ast_node& node, const irep_error& err) {
 		tp = type::RETURN;
 		expr = new expr_node();
 		expr->read(node[0], err);
+		err.ensure(expr->has_return, "invalid expresion");
 	}
 }
 
@@ -216,6 +217,7 @@ void expr_node::read(const ast_node& node, const irep_error& err) {
 	} else {
 		err.ensure(0, "not supporting expression");
 	}
+	has_return = tp == expr_node::type::BOOL_ARIPHM || tp == expr_node::type::ARIPHM || tp == expr_node::type::CALL;
 }
 
 expr_node::expr_node() {
@@ -261,6 +263,8 @@ void while_loop_node::clear() {
 
 void while_loop_node::read(const ast_node& node, const irep_error& err) {
 	expr.read(node[2], err);
+	err.ensure(expr.has_return, "invalid expresion");
+
 	scope = new scope_node();
 	scope->read(node[4], err);
 }
@@ -286,7 +290,9 @@ void ifelse_node::read(const ast_node& node, const irep_error& err) {
 		else_scope = new scope_node();
 		else_scope->read(node[5][1], err);
 	}
+
 	expr.read(node[2], err);
+	err.ensure(expr.has_return, "invalid expresion");
 }
 
 ifelse_node::~ifelse_node() {
@@ -381,13 +387,18 @@ void scope_node::read(const ast_node& node, const irep_error& err) {
 }
 
 void function_node::read_args(const ast_node& node, const irep_error& err) {
+	argument_node new_arg; 
 	switch (node.plen()) {
 		case 4:
 			read_args(node[0], err);
-			args.PushBack({node[2].value, node[3].value});
+			new_arg.type = node[2];
+			new_arg.name.read(node[3], err);
+			args.PushBack(new_arg);
 			break;
 		case 2:
-			args.PushBack({node[0].value, node[1].value});
+			new_arg.type = node[0];
+			new_arg.name.read(node[1], err);
+			args.PushBack(new_arg);
 		default:
 			break;
 	}

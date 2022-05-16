@@ -4,10 +4,14 @@
 
 #include "strings.h"
 #include "list.h"
+#include "map.h"
 
 #include "parser.h"
 
 namespace oscript {
+	namespace listcode {
+		struct listcode;
+	};
 
 	struct irep_error {
 		virtual void ensure(bool expr, const string& def) const;
@@ -25,18 +29,19 @@ namespace oscript {
 
 	struct creation_expr_node {
 		bool raw;
-		string type;
-		string name;
+		id_node type;
+		id_node name;
 		value_node val;
 		void read(const ast_node& node, const irep_error& err);
+		void evaluate(listcode::listcode* out);
 	};
 
 	struct ariphmetic_expr_node {
 		enum class type { ASSIGN, ADD, SUB, MUL, DIV, ENCAPS, NONE } tp = type::NONE;
 		struct expr_node* left = NULL;
 		expr_node* right = NULL;
-
 		void read(const ast_node& node, const irep_error& err);
+		void evaluate(listcode::listcode* out);
 		~ariphmetic_expr_node();
 	};
 
@@ -44,40 +49,41 @@ namespace oscript {
 		enum class type { EQUAL, GRATER, NOT, AND, OR, NONE } tp = type::NONE;
 		expr_node* left = NULL;
 		expr_node* right = NULL;
-
 		void read(const ast_node& node, const irep_error& err);
+		void evaluate(listcode::listcode* out);
 		~boolean_ariphmetic_expr_node();
 	};
 
 	struct call_expr_node {
 		expr_node* callable;
 		Array<expr_node*> args;
-
 		call_expr_node();
 		void read_args(const ast_node& node, const irep_error& err);
 		void read(const ast_node& node, const irep_error& err);
+		void evaluate(listcode::listcode* out);
 		~call_expr_node();
 	};
 
 	struct get_expr_node {
 		expr_node* expr = NULL;
 		id_node childname;
-
 		get_expr_node();
 		void read(const ast_node& node, const irep_error& err);
+		void evaluate(listcode::listcode* out);
 		~get_expr_node();
 	};
 
 	struct control_flow_expr_node {
 		enum class type { RETURN, RETURN_NONE, BREAK, NONE } tp = type::NONE;
 		expr_node* expr = NULL;
-
 		void read(const ast_node& node, const irep_error& err);
+		void evaluate(listcode::listcode* out);
 		~control_flow_expr_node();
 	};
 
 	struct expr_node {
 		enum class type { CREATION, ARIPHM, BOOL_ARIPHM, CALL, GET, CFLOW, NONE } tp = type::NONE;
+		bool has_return = false;
 		union {
 			creation_expr_node create;
 			ariphmetic_expr_node ariphm;
@@ -91,6 +97,7 @@ namespace oscript {
 		void operator=(const expr_node& in);
 		void clear();
 		void read(const ast_node& node, const irep_error& err);
+		uint1 evaluate(listcode::listcode* out);
 		~expr_node();
 	};
 
@@ -99,6 +106,7 @@ namespace oscript {
 		struct scope_node* scope = NULL;
 		void read(const ast_node& node, const irep_error& err);
 		void clear();
+		void evaluate(listcode::listcode* out);
 		~while_loop_node();
 	};
 
@@ -108,6 +116,7 @@ namespace oscript {
 		scope_node* else_scope = NULL;
 		void read(const ast_node& node, const irep_error& err);
 		void clear();
+		void evaluate(listcode::listcode* out);
 		~ifelse_node();
 	};
 
@@ -123,6 +132,7 @@ namespace oscript {
 		void read(const ast_node& node, const irep_error& err);
 		void operator=(const code_block& in);
 		void clear();
+		void evaluate(listcode::listcode* out);
 		~code_block();
 	};
 
@@ -130,11 +140,12 @@ namespace oscript {
 		list<code_block> code;
 		void read_code(const ast_node& node, const irep_error& err);
 		void read(const ast_node& node, const irep_error& err);
+		void evaluate(listcode::listcode* out);
 	};
 
 	struct argument_node {
 		string type;
-		string id;
+		id_node name;
 	};
 
 	struct function_node {
@@ -144,13 +155,12 @@ namespace oscript {
 		scope_node body;
 		void read_args(const ast_node& node, const irep_error& err);
 		void read(const ast_node& node, const irep_error& err);
+		void evaluate(listcode::listcode* out);
 	};
 
 	struct treecode {
 		function_node entry;
-
 		void read(const ast_node& node, const irep_error& err);
-
-		void evaluate(fbody*);
+		void evaluate(listcode::listcode* out);
 	};
 };

@@ -33,7 +33,7 @@
     <ClCompile Include="..\src\callstack.cpp">
       <Filter>core\src</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\treecode.cpp">
+    <ClCompile Include="..\src\treecode_from_ast.cpp">
       <Filter>compiler\src</Filter>
     </ClCompile>
     <ClCompile Include="..\src\parser.cpp">
@@ -50,6 +50,12 @@
     </ClCompile>
     <ClCompile Include="..\src\script_section.cpp">
       <Filter>core\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\treecode_to_listcode.cpp">
+      <Filter>compiler\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\listcode.cpp">
+      <Filter>compiler\src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -79,6 +85,9 @@
     </ClInclude>
     <ClInclude Include="..\inc\script_section.h">
       <Filter>core\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\listcode.h">
+      <Filter>compiler\inc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -71,8 +71,16 @@ void fbody::exec(callstack* cs) {
 			imove(cs, bc.fetch_csl(), bc.fetch_csl());
 			break;
 
+		case inst::itype::JUMPIF:
+			ijumpif(cs, bc.fetch<int2>(), bc.fetch_csl());
+			break;
+			
 		case inst::itype::JUMP:
 			ijump(cs, bc.fetch<int2>());
+			break;
+
+		case inst::itype::JUMPIFNOT:
+			ijumpifnot(cs, bc.fetch<int2>(), bc.fetch_csl());
 			break;
 
 		case inst::itype::NONE:
@@ -134,6 +142,24 @@ void fbody::iload(callstack* cs, inst::iargs::csl local_ret, inst::iargs::csl lo
 	*ret = NDO->load((*path)->val);
 }
 
+void fbody::ijumpif(callstack* cs, int2 offset, inst::iargs::csl local_boolean) {
+	Object* obj = cs->get(local_boolean);
+	assert(obj && obj->type->convesions && obj->type->convesions->to_int);
+	alni val = obj->type->convesions->to_int(obj);
+	if (val) {
+		cs->jump(offset);
+	}
+}
+
+void fbody::ijumpifnot(callstack* cs, int2 offset, inst::iargs::csl local_boolean) {
+	Object* obj = cs->get(local_boolean);
+	assert(obj && obj->type->convesions && obj->type->convesions->to_int);
+	alni val = obj->type->convesions->to_int(obj);
+	if (!val) {
+		cs->jump(offset);
+	}
+}
+
 void fbody::ijump(callstack* cs, int2 offset) {
 	cs->jump(offset);
 }
@@ -149,7 +175,7 @@ void fbody::icall(callstack* cs, inst::iargs::cdp callable_name, inst::iargs::cs
 	assert(targeto && smethodid);
 
 	if (targeto->type == &DictObjectType) {
-		NDO_CASTV(DictObject, targeto, dicto);	
+		NDO_CASTV(DictObject, targeto, dicto);
 		auto method_obj_idx = dicto->items.Presents(smethodid);
 		if (method_obj_idx) {
 			assert(dicto->items[method_obj_idx]->type == &MethodObjectType && "cant call non method object");
@@ -157,7 +183,7 @@ void fbody::icall(callstack* cs, inst::iargs::cdp callable_name, inst::iargs::cs
 			cs->call(&methodo->script->code);
 			return;
 		}
-	} 
+	}
 
 	struct tmcaller : public object_caller {
 

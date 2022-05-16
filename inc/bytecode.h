@@ -18,6 +18,8 @@ namespace inst {
 		PUSH,
 		RET,
 		DESTROY,
+		JUMPIF,
+		JUMPIFNOT,
 		JUMP,
 		MOVE
 	};
@@ -74,6 +76,8 @@ struct fbody {
 	void iload(callstack* cs, inst::iargs::csl local_ret, inst::iargs::csl local_path);
 	void idestroy(callstack* cs, inst::iargs::csl local_rem);
 
+	void ijumpif(callstack* cs, int2 offset, inst::iargs::csl local_boolean);
+	void ijumpifnot(callstack* cs, int2 offset, inst::iargs::csl local_boolean);
 	void ijump(callstack* cs, int2 offset);
 	void imove(callstack* cs, inst::iargs::csl local_from, inst::iargs::csl local_to);
 	void ipush(callstack* cs, inst::iargs::csl local_arg);
