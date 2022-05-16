@@ -27,15 +27,15 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\bytecode_from_listcode.cpp" />
     <ClCompile Include="..\src\callstack.cpp" />
     <ClCompile Include="..\src\bytecode.cpp" />
     <ClCompile Include="..\src\compiler.cpp" />
     <ClCompile Include="..\src\listcode.cpp" />
     <ClCompile Include="..\src\methodobject.cpp" />
     <ClCompile Include="..\src\script_section.cpp" />
-    <ClCompile Include="..\src\treecode_to_listcode.cpp" />
+    <ClCompile Include="..\src\listcode_from_treecode.cpp" />
     <ClCompile Include="..\src\treecode_from_ast.cpp" />
-    <ClCompile Include="..\src\irep.cpp" />
     <ClCompile Include="..\src\parser.cpp" />
     <ClCompile Include="..\src\process.cpp" />
   </ItemGroup>
@@ -47,7 +47,6 @@
     <ClInclude Include="..\inc\methodobject.h" />
     <ClInclude Include="..\inc\script_section.h" />
     <ClInclude Include="..\inc\treecode.h" />
-    <ClInclude Include="..\inc\irep.h" />
     <ClInclude Include="..\inc\parser.h" />
     <ClInclude Include="..\inc\process.h" />
   </ItemGroup>

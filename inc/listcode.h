@@ -21,6 +21,7 @@ namespace oscript {
 		struct scope {
 			scope_node* tc_scope = NULL;
 			HashMap<object_definition, string> locals;
+			alni locals_idx_start = 0;
 
 			bool define(string name, instruction* inst) {
 				auto idx = locals.Presents(name);
@@ -35,8 +36,16 @@ namespace oscript {
 		struct create_inst : public instruction {
 			bool temp = false;
 			uint1 temp_local_idx = 0;
-			create_inst() { 
+			create_inst() {
 				tp = inst::itype::CREATE;
+			}
+		};
+
+		struct delete_inst : public instruction {
+			bool temp = false;
+			uint1 temp_local_idx = 0;
+			delete_inst() {
+				tp = inst::itype::DESTROY;
 			}
 		};
 
@@ -81,19 +90,32 @@ namespace oscript {
 			stack<scope*> scope_stack;
 			list<instruction*> instructions;
 
-			void enter_scope(scope_node* tree_node) {
+			scope* enter_scope(scope_node* tree_node) {
 				scope* child_scope = new scope();
+				child_scope->locals_idx_start = current_defined_locals;
 				child_scope->tc_scope = tree_node;
 				scope_stack.push(child_scope);
+				return child_scope;
 			}
 
 			void leave_sope() {
-				delete scope_stack.last->data;
+				scope* current_scope = scope_stack.last->data;
+				for (uint1 local_idx = current_scope->locals_idx_start; local_idx < current_defined_locals; local_idx++) {
+					add_idelete(local_idx, false);
+				}
+				delete current_scope;
+				scope_stack.pop();
 				scope_stack.pop();
 			}
 
 			void new_statement() {
 				current_line_ntemps = 0;
+			}
+
+			void statement_end() {
+				for (uint1 temp_idx = 0; temp_idx < current_line_ntemps; temp_idx++) {
+					add_idelete(temp_idx, true);
+				}
 			}
 
 			bool add_icreate(bool temp, string name = "", string type = "") {
@@ -109,6 +131,13 @@ namespace oscript {
 					}
 					current_defined_locals++;
 				}
+			}
+
+			void add_idelete(uint1 local_idx, bool temp) {
+				delete_inst* deli = new delete_inst();
+				deli->temp = temp;
+				deli->temp_local_idx = local_idx;
+				instructions.PushBack(deli);
 			}
 
 			jump_ifnot_inst* add_ijump_ifnot(uint1 local_idx) {

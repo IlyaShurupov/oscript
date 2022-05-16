@@ -39,9 +39,6 @@
     <ClCompile Include="..\src\parser.cpp">
       <Filter>compiler\src</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\irep.cpp">
-      <Filter>compiler\src</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\compiler.cpp">
       <Filter>compiler\src</Filter>
     </ClCompile>
@@ -51,10 +48,13 @@
     <ClCompile Include="..\src\script_section.cpp">
       <Filter>core\src</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\treecode_to_listcode.cpp">
+    <ClCompile Include="..\src\listcode_from_treecode.cpp">
       <Filter>compiler\src</Filter>
     </ClCompile>
     <ClCompile Include="..\src\listcode.cpp">
+      <Filter>compiler\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\bytecode_from_listcode.cpp">
       <Filter>compiler\src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -72,9 +72,6 @@
       <Filter>compiler\inc</Filter>
     </ClInclude>
     <ClInclude Include="..\inc\parser.h">
-      <Filter>compiler\inc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\inc\irep.h">
       <Filter>compiler\inc</Filter>
     </ClInclude>
     <ClInclude Include="..\inc\compiler.h">

@@ -4,14 +4,6 @@
 
 using namespace oscript;
 
-
-void irep_error::ensure(bool expr, const string& def) const {
-	if (!expr) {
-		rterror((string("oscript parser error - ") + def).cstr());
-	}
-}
-
-// at this point we have full treecode constucted and ready to generate the actual code
 void oscript::treecode::evaluate(listcode::listcode* out) {
 	entry.evaluate(out);
 }
@@ -36,6 +28,7 @@ void oscript::scope_node::evaluate(listcode::listcode* out) {
 		out->new_statement();
 		code_block& cb = cb_iter.Data();
 		cb.evaluate(out);
+		out->statement_end();
 	}
 
 	out->leave_sope();
@@ -136,10 +129,10 @@ void oscript::control_flow_expr_node::evaluate(listcode::listcode* out) {
 			out->add_ireturn(expr->evaluate(out));
 		}
 		case oscript::control_flow_expr_node::type::BREAK: {
-			for (auto inst : out->instructions) {
-				if (inst->none_tp == listcode::instruction::none_inst_type::WHILELOOP) {
+			for (list_node<listcode::instruction*>* iter = out->instructions.Last(); iter; iter = iter->prev) {
+				if (iter->data->none_tp == listcode::instruction::none_inst_type::WHILELOOP) {
 					// after while loop
-					listcode::whileloop_inst* whinst = (listcode::whileloop_inst*) inst.Data();
+					listcode::whileloop_inst* whinst = (listcode::whileloop_inst*) iter->data;
 					assert(whinst->loop_end && "break is outside while loop");
 				}
 			}
