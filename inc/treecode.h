@@ -8,22 +8,22 @@
 
 #include "parser.h"
 
-namespace oscript {
+namespace osc {
 	namespace listcode {
 		struct listcode;
 	};
 
 	struct irep_error {
-		virtual void ensure(bool expr, const string& def) const;
+		virtual void ensure(bool expr, const tp::string& def) const {}
 	};
 
 	struct id_node {
-		string id;
+		tp::string id;
 		void read(const ast_node& node, const irep_error& err);
 	};
 
 	struct value_node {
-		string val;
+		tp::string val;
 		void read(const ast_node& node, const irep_error& err);
 	};
 
@@ -56,7 +56,7 @@ namespace oscript {
 
 	struct call_expr_node {
 		expr_node* callable;
-		Array<expr_node*> args;
+		tp::Array<expr_node*> args;
 		call_expr_node();
 		void read_args(const ast_node& node, const irep_error& err);
 		void read(const ast_node& node, const irep_error& err);
@@ -97,7 +97,7 @@ namespace oscript {
 		void operator=(const expr_node& in);
 		void clear();
 		void read(const ast_node& node, const irep_error& err);
-		uint1 evaluate(listcode::listcode* out);
+		tp::uint1 evaluate(listcode::listcode* out);
 		~expr_node();
 	};
 
@@ -137,21 +137,21 @@ namespace oscript {
 	};
 
 	struct scope_node {
-		list<code_block> code;
+		tp::List<code_block> code;
 		void read_code(const ast_node& node, const irep_error& err);
 		void read(const ast_node& node, const irep_error& err);
 		void evaluate(listcode::listcode* out);
 	};
 
 	struct argument_node {
-		string type;
+		tp::string type;
 		id_node name;
 	};
 
 	struct function_node {
 		id_node name;
 		id_node ret;
-		list<argument_node> args;
+		tp::List<argument_node> args;
 		scope_node body;
 		void read_args(const ast_node& node, const irep_error& err);
 		void read(const ast_node& node, const irep_error& err);

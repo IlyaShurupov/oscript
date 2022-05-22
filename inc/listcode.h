@@ -5,7 +5,8 @@
 
 #include "treecode.h"
 
-namespace oscript {
+namespace osc {
+
 	namespace listcode {
 
 		struct instruction {
@@ -14,28 +15,28 @@ namespace oscript {
 		};
 
 		struct object_definition {
-			string name;
+			tp::string name;
 			instruction* inst = NULL;
 		};
 
 		struct scope {
 			scope_node* tc_scope = NULL;
-			HashMap<object_definition, string> locals;
-			alni locals_idx_start = 0;
+			tp::HashMap<object_definition, tp::string> locals;
+			tp::alni locals_idx_start = 0;
 
-			bool define(string name, instruction* inst) {
-				auto idx = locals.Presents(name);
+			bool define(tp::string name, instruction* inst) {
+				auto idx = locals.presents(name);
 				if (idx) {
 					return false;
 				}
-				locals.Put(name, {name, inst});
+				locals.put(name, {name, inst});
 				return true;
 			}
 		};
 
 		struct create_inst : public instruction {
 			bool temp = false;
-			uint1 temp_local_idx = 0;
+			tp::uint1 temp_local_idx = 0;
 			create_inst() {
 				tp = inst::itype::CREATE;
 			}
@@ -43,7 +44,7 @@ namespace oscript {
 
 		struct delete_inst : public instruction {
 			bool temp = false;
-			uint1 temp_local_idx = 0;
+			tp::uint1 temp_local_idx = 0;
 			delete_inst() {
 				tp = inst::itype::DESTROY;
 			}
@@ -52,7 +53,7 @@ namespace oscript {
 		struct jump_ifnot_inst : public instruction {
 			instruction* next_inst = NULL;
 			bool after = false;
-			uint1 local_boolean_idx = 0;
+			tp::uint1 local_boolean_idx = 0;
 
 			jump_ifnot_inst() {
 				tp = inst::itype::JUMPIFNOT;
@@ -77,18 +78,18 @@ namespace oscript {
 		};
 
 		struct return_val_inst : public instruction {
-			uint1 local_idx = 0;
+			tp::uint1 local_idx = 0;
 			return_val_inst() {
 				tp = inst::itype::RET;
 			}
 		};
 
 		struct listcode {
-			uint1 current_line_ntemps = 0;
-			uint1 current_defined_locals = 0;
+			tp::uint1 current_line_ntemps = 0;
+			tp::uint1 current_defined_locals = 0;
 			bool last_expr_was_define = false;
-			stack<scope*> scope_stack;
-			list<instruction*> instructions;
+			tp::Stack<scope*> scope_stack;
+			tp::List<instruction*> instructions;
 
 			scope* enter_scope(scope_node* tree_node) {
 				scope* child_scope = new scope();
@@ -100,7 +101,7 @@ namespace oscript {
 
 			void leave_sope() {
 				scope* current_scope = scope_stack.last->data;
-				for (uint1 local_idx = current_scope->locals_idx_start; local_idx < current_defined_locals; local_idx++) {
+				for (tp::uint1 local_idx = current_scope->locals_idx_start; local_idx < current_defined_locals; local_idx++) {
 					add_idelete(local_idx, false);
 				}
 				delete current_scope;
@@ -113,12 +114,12 @@ namespace oscript {
 			}
 
 			void statement_end() {
-				for (uint1 temp_idx = 0; temp_idx < current_line_ntemps; temp_idx++) {
+				for (tp::uint1 temp_idx = 0; temp_idx < current_line_ntemps; temp_idx++) {
 					add_idelete(temp_idx, true);
 				}
 			}
 
-			bool add_icreate(bool temp, string name = "", string type = "") {
+			bool add_icreate(bool temp, tp::string name = "", tp::string type = "") {
 				create_inst* create = new create_inst();
 				if (temp) {
 					create->temp = true;
@@ -130,33 +131,35 @@ namespace oscript {
 						return false;
 					}
 					current_defined_locals++;
+					return true;
 				}
+				return false;
 			}
 
-			void add_idelete(uint1 local_idx, bool temp) {
+			void add_idelete(tp::uint1 local_idx, bool temp) {
 				delete_inst* deli = new delete_inst();
 				deli->temp = temp;
 				deli->temp_local_idx = local_idx;
-				instructions.PushBack(deli);
+				instructions.pushBack(deli);
 			}
 
-			jump_ifnot_inst* add_ijump_ifnot(uint1 local_idx) {
+			jump_ifnot_inst* add_ijump_ifnot(tp::uint1 local_idx) {
 				jump_ifnot_inst* jumpi = new jump_ifnot_inst();
 				jumpi->local_boolean_idx = local_idx;
-				instructions.PushBack(jumpi);
+				instructions.pushBack(jumpi);
 				return jumpi;
 			}
 
 			jump_inst* add_ijump() {
 				jump_inst* jumpi = new jump_inst();
-				instructions.PushBack(jumpi);
+				instructions.pushBack(jumpi);
 				return jumpi;
 			}
 
-			void add_ireturn(uint1 local_idx) {
+			void add_ireturn(tp::uint1 local_idx) {
 				return_val_inst* retvali = new return_val_inst();
 				retvali->local_idx = local_idx;
-				instructions.PushBack(retvali);
+				instructions.pushBack(retvali);
 			}
 
 			~listcode() {

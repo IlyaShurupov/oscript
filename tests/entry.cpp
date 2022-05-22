@@ -7,7 +7,9 @@
 #include "methodobject.h"
 #include "primitives/primitives.h"
 
-using namespace oscript;
+using namespace osc;
+using namespace tp;
+using namespace obj;
 
 int main(int argc, char* argv[]) {
 

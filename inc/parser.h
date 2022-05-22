@@ -3,12 +3,12 @@
 #include "list.h"
 #include "string.h"
 
-namespace oscript {
+namespace osc {
 
 	struct ast_node {
-		list<ast_node*> childs;
-		string type;
-		string value;
+		tp::List<ast_node*> childs;
+		tp::string type;
+		tp::string value;
 		bool terminal = false;
 
 		~ast_node() {
@@ -17,14 +17,14 @@ namespace oscript {
 			}
 		}
 
-		alni plen() const { return childs.Len(); }
-		const ast_node& operator[](alni idx) const { return *childs[idx]; }
+		tp::alni plen() const { return childs.length(); }
+		const ast_node& operator[](tp::alni idx) const { return *childs[idx]; }
 	};
 
 	struct parser {
 
-		parser(const string& grammar);
-		ast_node* parse(const string& stream);
+		parser(const tp::string& grammar);
+		ast_node* parse(const tp::string& stream);
 		~parser();
 
 		private: void* grammar_compiler = NULL;

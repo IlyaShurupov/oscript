@@ -1,11 +1,20 @@
 
 #include "compiler.h"
 
-using namespace oscript;
+using namespace osc;
 
-compiler::compiler() : pars(read_file("oscript.grammar")) {}
+compiler::compiler() : pars(tp::read_file("oscript.grammar")) {}
 
-void compiler::compile(const string& oscript, fbody* out) {
+struct compiler_err : public irep_error {
+	virtual void ensure(bool expr, const tp::string& def) const override {
+		if (!expr) {
+			assert(0 && "compiler error");
+			printf(def.cstr());
+		}
+	}
+};
+
+void compiler::compile(const tp::string& oscript, fbody* out) {
 	assert(out);
 
 	ast_node* ast = pars.parse(oscript);
@@ -14,8 +23,8 @@ void compiler::compile(const string& oscript, fbody* out) {
 		return;
 	}
 
-	main_node.read(*ast, irep_error());
-	main_node.evaluate(out);
+	main_node.read(*ast, compiler_err());
+	//main_node.evaluate(out);
 }
 
 compiler::~compiler() {}

@@ -28,7 +28,6 @@
     <None Include="postbuild.py" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\script_section.cpp" />
     <ClCompile Include="..\tests\entry.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
