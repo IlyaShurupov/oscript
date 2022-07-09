@@ -1,2 +1,2 @@
 # oscript
-Not in the working stage.
+Not production ready
