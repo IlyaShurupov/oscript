@@ -1,2 +1,2 @@
-# oscript - Objects scripting language
-Not in the working state.
+# oscript
+Not in the working stage.
