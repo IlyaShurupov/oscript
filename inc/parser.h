@@ -13,7 +13,7 @@ namespace osc {
 
 		~ast_node() {
 			for (auto child : childs) {
-				delete child.Data();
+				delete child.data();
 			}
 		}
 

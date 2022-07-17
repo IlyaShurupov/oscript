@@ -165,7 +165,7 @@ namespace osc {
 			~listcode() {
 				assert(!scope_stack.length);
 				for (auto inst : instructions) {
-					delete inst.Data();
+					delete inst.data();
 				}
 			}
 		};

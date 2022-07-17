@@ -67,7 +67,7 @@ namespace osc {
 
 		for (auto iter : self->scripts) {
 
-			set_script_head_store_adress(iter.Data(), file.adress);
+			set_script_head_store_adress(iter.data(), file.adress);
 
 			// save code
 			iter->code.bc.buff.save(file);
@@ -84,7 +84,7 @@ namespace osc {
 	void MemScriptSection::load_script_table_from_file(MemScriptSection* self, tp::File& file) {
 
 		for (auto iter : self->scripts) {
-			set_script_head_store_adress(iter.Data(), -1);
+			set_script_head_store_adress(iter.data(), -1);
 		}
 
 		file.adress += 18;
@@ -109,8 +109,8 @@ namespace osc {
 
 	script_data* MemScriptSection::get_scritp_from_file_adress(tp::alni file_adress) {
 		for (auto iter : scripts) {
-			if (get_script_head_store_adress(iter.Data()) == file_adress) {
-				return iter.Data();
+			if (get_script_head_store_adress(iter.data()) == file_adress) {
+				return iter.data();
 			}
 		}
 		return NULL;
@@ -118,7 +118,7 @@ namespace osc {
 
 	MemScriptSection::~MemScriptSection() {
 		for (auto iter : scripts) {
-			delete_script(iter.Data());
+			delete_script(iter.data());
 		}
 	}
 

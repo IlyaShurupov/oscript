@@ -12,7 +12,7 @@ namespace osc {
 		func->enter_scope(NULL);
 
 		for (auto farg : args) {
-			bool suc = func->scope_stack.last->data->define(farg.Data().name.id, NULL);
+			bool suc = func->scope_stack.last->data->define(farg.data().name.id, NULL);
 			assert(suc);
 		}
 
@@ -26,7 +26,7 @@ namespace osc {
 
 		for (auto cb_iter : code) {
 			out->new_statement();
-			code_block& cb = cb_iter.Data();
+			code_block& cb = cb_iter.data();
 			cb.evaluate(out);
 			out->statement_end();
 		}
@@ -132,7 +132,7 @@ namespace osc {
 			}
 			case control_flow_expr_node::type::BREAK:
 			{
-				for (tp::list_node<listcode::instruction*>* iter = out->instructions.last(); iter; iter = iter->prev) {
+				for (tp::ListNode<listcode::instruction*>* iter = out->instructions.last(); iter; iter = iter->prev) {
 					if (iter->data->none_tp == listcode::instruction::none_inst_type::WHILELOOP) {
 						// after while loop
 						listcode::whileloop_inst* whinst = (listcode::whileloop_inst*) iter->data;
